@@ -1,0 +1,59 @@
+html
+  overflow: hidden
+
+::-webkit-scrollbar
+  height: 16px
+  overflow: visible
+  visibility: visible
+  width: 16px
+
+::-webkit-scrollbar-button
+  height: 0
+  width: 0
+
+::-webkit-scrollbar-corner
+  background: transparent
+
+::-webkit-scrollbar-thumb
+  background-color: rgba(0,0,0,0.2)
+  background-clip: padding-box
+  border: solid transparent
+  border-width: 1px 1px 1px 6px
+  min-height: 28px
+  padding: 100px 0 0
+  box-shadow: inset 1px 1px 0 rgba(0,0,0,0.1), inset 0 -1px 0 rgba(0,0,0,0.07)
+
+::-webkit-scrollbar-track
+  background-clip: padding-box
+  border: solid transparent
+  border-width: 0 0 0 4px
+
+.card__title
+  padding: 24px 24px 20px 24px
+
+.card__text
+  padding: 0 24px
+
+.card__actions
+  padding: 24px 8px 8px
+  .btn
+    margin: 0 8px 0 0
+    &:last-child
+      margin: 0
+
+.btn--floating--custom
+  right: 108px
+  bottom: 48px !important
+
+table.table
+  tbody
+    tr
+      &:not(:last-child)
+        border-bottom: none !important
+    td
+      height: 59px
+      button
+        margin: 12px 0
+
+th.action
+  color: transparent !important

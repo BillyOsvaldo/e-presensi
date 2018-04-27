@@ -1,0 +1,52 @@
+{
+  "name": "e-presensi",
+  "version": "1.0.0",
+  "description": "nuxt vuex featherjs e-presensi",
+  "author": "dckristiono <dckristiono@gmail.com>",
+  "private": true,
+  "scripts": {
+    "dev": "HOST=0.0.0.0 PORT=3001 nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "@feathersjs/authentication-client": "^1.0.2",
+    "@feathersjs/client": "^3.4.4",
+    "@feathersjs/feathers": "^3.1.4",
+    "@feathersjs/socketio-client": "^1.1.0",
+    "axios": "^0.17.1",
+    "cookie-storage": "^3.1.0",
+    "feathers-vuex": "^1.1.4",
+    "fullcalendar": "^3.9.0",
+    "jquery": "^3.3.1",
+    "js-cookie": "^2.2.0",
+    "moment": "^2.20.1",
+    "node-sass": "^4.9.0",
+    "nuxt": "^1.4.0",
+    "sass-loader": "^6.0.6",
+    "socket.io-client": "^2.0.4",
+    "vee-validate": "^2.0.0-rc.26",
+    "vue-full-calendar": "^2.5.4",
+    "vuetify": "^1.0.16"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "cross-env": "^5.1.4",
+    "eslint": "^4.3.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-html": "^3.1.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  },
+  "resolutions": {
+    "nuxt/vue": "^2.5.16",
+    "nuxt/vue-server-renderer": "^2.5.16",
+    "nuxt/vue-template-compiler": "^2.5.16"
+  }
+}
