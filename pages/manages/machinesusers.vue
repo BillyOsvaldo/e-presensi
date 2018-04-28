@@ -20,22 +20,43 @@
         <span>Belum ada data.</span>
       </template>
     </v-data-table>
-    <v-fab-transition>
+    <v-speed-dial
+      class="btn--floating--custom"
+      fixed
+      bottom
+      right
+      transition="slide-y-reverse-transition"
+    >
       <v-btn
-        class="btn--floating--custom"
+        slot="activator"
         color="red"
         dark
-        fixed
-        bottom
-        right
         fab
-        @click.native="syncItem"
+        hover
       >
         <v-icon>cached</v-icon>
+        <v-icon>close</v-icon>
       </v-btn>
-    </v-fab-transition>
+      <v-btn
+        fab
+        dark
+        small
+        color="indigo"
+        @click.native="syncItem"
+      >
+        <v-icon>import_export</v-icon>
+      </v-btn>
+      <v-btn
+        fab
+        dark
+        small
+        color="green"
+        @click.native="deleteItem"
+      >
+        <v-icon>clear</v-icon>
+      </v-btn>
+    </v-speed-dial>
     <dialogSync/>
-    <dialogAddAll/>
     <dialogDelete/>
   </div>
 </template>
@@ -44,8 +65,7 @@
 import api from '~/api/feathers-client'
 import {mapState, mapGetters} from 'vuex'
 import dialogSync from '~/components/dialogs/manages/machinesusers/_sync'
-import dialogAddAll from '~/components/dialogs/manages/machines/_addAll'
-import dialogDelete from '~/components/dialogs/manages/machines/_delete'
+import dialogDelete from '~/components/dialogs/manages/machinesusers/_delete'
 import {generateTable, resizeTable, loadData} from '~/utils/datatable'
 export default {
   data: () => ({
@@ -80,7 +100,6 @@ export default {
   }),
   components: {
     dialogSync,
-    dialogAddAll,
     dialogDelete
   },
   computed: {
@@ -195,7 +214,6 @@ export default {
       this.$root.$emit('openDialogSyncMachinesusers')
     },
     deleteItem (item) {
-      this.$store.commit('machinesusersmanagement/setCurrent', item)
       this.$root.$emit('opendialogDeleteMachineUsers')
     },
     changeOrderUp (items, item) {

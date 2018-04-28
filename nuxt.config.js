@@ -1,4 +1,4 @@
-// const webpack = require('webpack')
+const webpack = require('webpack')
 module.exports = {
   /*
   ** Headers of the page
@@ -23,6 +23,15 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    plugins: [
+      new webpack.ProvidePlugin({
+        '$': 'jquery',
+        '_': 'lodash',
+        jQuery: 'jquery',
+        $: 'jquery',
+        'window.jQuery': 'jquery'
+      })
+    ],
     /*
     ** Run ESLint on save
     */

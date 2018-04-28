@@ -1,11 +1,11 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialogReview" persistent scrollable max-width="480">
-      <v-card v-if="dialogReview">
-        <v-card-title class="headline">Review Ketidakhadiran</v-card-title>
+    <v-dialog v-model="dialogAdd" persistent scrollable max-width="480">
+      <v-card v-if="dialogAdd">
+        <v-card-title class="headline">Tambah Ketidakhadiran</v-card-title>
         <v-card-text style="max-height: 300px;">
           <v-container grid-list-md>
-            <v-layout wrap v-bind="loadData">
+            <v-layout wrap>
               <v-flex xs12>
                 <v-select
                   autofocus
@@ -13,7 +13,6 @@
                   autocomplete
                   v-bind:items="item_users"
                   item-text="user"
-                  item-value="_id"
                   v-validate="'required'"
                   data-vv-name="user"
                   :error-messages="errors.collect('user')"
@@ -27,7 +26,6 @@
                   autocomplete
                   v-bind:items="item_absencestypes"
                   item-text="absencestype"
-                  item-value="_id"
                   v-validate="'required'"
                   data-vv-name="absencestype"
                   :error-messages="errors.collect('absencestype')"
@@ -123,9 +121,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn flat @click.native="closedialogReviewButton">Batal</v-btn>
+          <v-btn flat @click.native="closedialogAddButton">Batal</v-btn>
           <v-btn flat color="blue darken-1"
-            @click.native="postCreated">Setujui</v-btn>
+            @click.native="postCreated">Tambah</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -140,6 +138,9 @@
   const customHelptext = {
     en: {
       custom: {
+        user: {
+          required: 'Nama pengguna harus dipilih.'
+        },
         startDate: {
           required: 'Tanggal Mulai harus diisi.'
         },
@@ -158,10 +159,9 @@
 
   export default {
     data: () => ({
-      dialogReview: false,
+      dialogAdd: false,
       loading: false,
       search: null,
-      user: null,
       absencestype: null,
       desc: null,
       menu_startDate: false,
@@ -175,7 +175,6 @@
       ...mapState({
       }),
       ...mapGetters({
-        absences: 'absencesmanagement/current',
         dataUser: 'usersauthentication/current',
         users: 'findusersbyorganization/list',
         absencestypesselect: 'absencestypesselect/list'
@@ -208,23 +207,11 @@
           })
         }
         return _output
-      },
-      loadData () {
-        if (this.dialogReview) {
-          this.$validator.reset()
-          this.user = (this.absences.user) ? this.absences.user._id : ''
-          this.absencestype = (this.absences.absencestype) ? this.absences.absencestype._id : ''
-          this.date_for_startDate = moment(this.absences.startDate).format('YYYY-MM-DD')
-          this.startDate = (this.absences.startDate) ? formatFormDate(moment(this.absences.startDate).format('YYYY-MM-DD')) : ''
-          this.date_for_endDate = moment(this.absences.endDate).format('YYYY-MM-DD')
-          this.endDate = (this.absences.endDate) ? formatFormDate(moment(this.absences.endDate).format('YYYY-MM-DD')) : ''
-          this.desc = (this.absences.desc) ? this.absences.desc : ''
-        }
       }
     },
     methods: {
-      closedialogReviewButton () {
-        this.dialogReview = !this.dialogReview
+      closedialogAddButton () {
+        this.dialogAdd = !this.dialogAdd
         this.resetAll()
       },
       postCreated () {
@@ -232,20 +219,18 @@
           this.$validator.validateAll()
             .then((result) => {
               if (result) {
-                let data = {
-                  user: this.user,
+                let newAbsence = {
+                  user: this.user._id,
                   absencestype: this.absencestype,
                   startDate: parseFormDate(this.startDate),
                   endDate: parseFormDate(this.endDate),
                   desc: this.desc,
                   status: true
                 }
-                let params = {}
-                this.$store.commit('absencesmanagement/clearPatchError')
-                this.$store.dispatch('absencesmanagement/patch', [this.absences._id, data, params])
+                this.$store.dispatch('absencesmanagement/create', newAbsence)
                   .then(response => {
                     if (response) {
-                      this.dialogReview = false
+                      this.dialogAdd = false
                       this.resetAll()
                     }
                   })
@@ -260,10 +245,10 @@
         setTimeout(() => this.$validator.validate(field), 500)
       },
       resetAll () {
-        this.$store.commit('absencesmanagement/clearPatchError')
+        this.$store.commit('absencesmanagement/clearCreateError')
         this.$validator.reset()
-        this.search = null
         this.user = null
+        this.search = null
         this.absencestype = null
         this.desc = null
         this.menu_startDate = false
@@ -275,8 +260,8 @@
       }
     },
     created () {
-      this.$root.$on('openDialogReviewAbsence', () => {
-        this.dialogReview = true
+      this.$root.$on('openDialogAddAbsence', () => {
+        this.dialogAdd = true
       })
       this.$validator.localize(customHelptext)
     }

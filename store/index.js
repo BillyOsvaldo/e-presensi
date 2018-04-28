@@ -31,6 +31,10 @@ export const storeSocket = new Vuex.Store({
     service('absencestypesmanagement'),
     service('absencesmanagement'),
     service('absencestypesselect'),
+    service('presencesreportssingle', {
+      idField: 'id'
+    }),
+    service('presences'),
     /* service('userRegistration'),
     service('userapp'),
     service('addresses'),

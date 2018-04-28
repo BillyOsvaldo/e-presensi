@@ -34,13 +34,29 @@
         <span>Belum ada data.</span>
       </template>
     </v-data-table>
+    <dialogAdd/>
     <dialogReview/>
+    <v-fab-transition>
+      <v-btn
+        class="btn--floating--custom"
+        color="red"
+        dark
+        fixed
+        bottom
+        right
+        fab
+        @click.native="addItem"
+      >
+        <v-icon>add</v-icon>
+      </v-btn>
+    </v-fab-transition>
   </div>
 </template>
 
 <script>
 import api from '~/api/feathers-client'
 import {mapState, mapGetters} from 'vuex'
+import dialogAdd from '~/components/dialogs/manages/absences/_add'
 import dialogReview from '~/components/dialogs/manages/absences/_review'
 import {generateTable, resizeTable, loadData} from '~/utils/datatable'
 import {defaultDateFormat} from '~/utils/format'
@@ -76,6 +92,7 @@ export default {
     tempAdded: []
   }),
   components: {
+    dialogAdd,
     dialogReview
   },
   computed: {
@@ -83,6 +100,7 @@ export default {
       absences: 'absencesmanagement'
     }),
     ...mapGetters({
+      userData: 'usersauthentication/current',
       absencesList: 'absencesmanagement/list'
     }),
     loadData () {
@@ -155,6 +173,13 @@ export default {
         }
       })
       this.$store.dispatch('absencestypesselect/find', params)
+      let paramsOrganization = {
+        query: {
+          organization: this.userData.organization._id
+        }
+      }
+      console.log(paramsOrganization)
+      this.$store.dispatch('findusersbyorganization/find', paramsOrganization)
     },
     getNextPage () {
       if (!this.scrollBottom) {
@@ -176,6 +201,9 @@ export default {
         }
         this.$store.dispatch('absencesmanagement/find', params)
       }
+    },
+    addItem () {
+      this.$root.$emit('openDialogAddAbsence')
     },
     reviewItem (item) {
       this.$store.commit('absencesmanagement/setCurrent', item)
