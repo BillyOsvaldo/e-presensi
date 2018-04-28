@@ -31,10 +31,14 @@ export const storeSocket = new Vuex.Store({
     service('absencestypesmanagement'),
     service('absencesmanagement'),
     service('absencestypesselect'),
+<<<<<<< HEAD
     service('presencesreportssingle', {
       idField: 'id'
     }),
     service('presences'),
+=======
+    service('presencesreports'),
+>>>>>>> 1c20a61a2ed303e4b97afd134a87980d60b69e21
     /* service('userRegistration'),
     service('userapp'),
     service('addresses'),
