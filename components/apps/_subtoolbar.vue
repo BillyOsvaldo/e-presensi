@@ -3,7 +3,10 @@
     <v-toolbar flat light color="white" style="padding: 0 8px;">
       <v-toolbar-title>{{ this.menu.name }}<span v-if="count" class="count">({{count}})</span></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon color="white--text">
+      <v-btn icon v-if="$route.path === '/manages/reports'">
+        <v-icon>filter_list</v-icon>
+      </v-btn>
+      <v-btn icon v-if="false">
         <v-icon>more_vert</v-icon>
       </v-btn>
     </v-toolbar>
