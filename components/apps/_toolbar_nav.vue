@@ -64,7 +64,7 @@
         <v-list-tile avatar>
           <v-list-tile-content>
             <v-list-tile-title style="font-size: 24px;
-    font-weight: 400;">{{appName}}</v-list-tile-title>
+            font-weight: 400;">{{appName}}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
