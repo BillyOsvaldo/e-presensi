@@ -1,4 +1,46 @@
 <template>
+  <div>
+  <v-card v-if="filterTable"
+  style="position:absolute; 
+  background:#fff; 
+  z-index:99;
+  width:400px;
+  right:10px; "
+  >
+    <v-card-title class="headline">
+    Filter Laporan
+    </v-card-title>
+      <v-card-text style="max-height: 300px;">
+        <v-container grid-list-md>
+          <v-layout wrap>
+            <v-flex xs12>
+              <v-select
+                :items="items_bulan"
+                v-model="pilih_bulan"
+                label="Bulan"
+                class="input-group--focused"
+                item-value="value"
+                ></v-select>
+            </v-flex>
+            <v-flex xs12>
+                <v-select
+                :items="items_tahun"
+                v-model="pilih_tahun"
+                label="Tahun"
+                class="input-group--focused"
+                item-value="value"
+                ></v-select>
+            </v-flex>
+          </v-layout>
+      </v-container>
+    </v-card-text>
+    <v-divider></v-divider>
+    <v-card-actions>
+      <v-btn depressed color="error" @click.native="closedialogButton">Batal</v-btn>
+      <v-spacer></v-spacer>
+      <v-btn depressed color="primary" @click="onSubmit">Proses</v-btn>
+    </v-card-actions>
+  </v-card>
   <div class="reports-content" v-resize="onResize" style="background: #fff;">
     <v-data-table
       :headers="headers"
@@ -15,8 +57,9 @@
         <td class="text-xs-left">{{ props.item.telat }}</td>
         <td class="text-xs-left">{{ props.item.pulang_cepat }}</td>
         <td style="font-weight: 500;">{{ props.item.alpa }}</td>
+        <td style="font-weight: 500;">{{ props.item.dl }}</td>
         <td style="font-weight: 500;">{{ props.item.cuti }}</td>
-        <td style="font-weight: 500;">{{ props.item.ijin }}</td>
+        <td style="font-weight: 500;">{{ props.item.izin }}</td>
         <td style="font-weight: 500;">{{ props.item.sakit }}</td>
       </template>
       <template slot="no-data">
@@ -38,21 +81,41 @@
       </v-btn>
     </v-fab-transition>
     <dialogSync/>
-    <dialogAddAll/>
-    <dialogDelete/>
+    </div>
   </div>
 </template>
 
 <script>
-import api from '~/api/feathers-client'
 import {mapState, mapGetters} from 'vuex'
 import dialogSync from '~/components/dialogs/manages/machinesusers/_sync'
-import dialogAddAll from '~/components/dialogs/manages/machines/_addAll'
-import dialogDelete from '~/components/dialogs/manages/machines/_delete'
 import {generateTable, resizeTable, loadData} from '~/utils/datatable'
+import moment from 'moment'
 export default {
   data: () => ({
     dialog: false,
+    pilih_bulan: null,
+    pilih_tahun: null,
+    items_bulan: [
+      { text: 'Januari', value: 1 },
+      { text: 'Februari', value: 2 },
+      { text: 'Maret', value: 3 },
+      { text: 'April', value: 4 },
+      { text: 'Mei', value: 5 },
+      { text: 'Juni', value: 6 },
+      { text: 'Juli', value: 7 },
+      { text: 'Agustus', value: 8 },
+      { text: 'September', value: 9 },
+      { text: 'Oktober', value: 10 },
+      { text: 'November', value: 11 },
+      { text: 'Desember', value: 12 }
+    ],
+    items_tahun: [
+      { text: '2018', value: 2018 },
+      { text: '2019', value: 2019 },
+      { text: '2020', value: 2018 },
+      { text: '2021', value: 2019 }
+    ],
+    filterTable: false,
     desc: null,
     desc1: null,
     tableCreated: false,
@@ -71,6 +134,7 @@ export default {
       { text: 'Telat', value: 'telat', sortable: false, align: 'left' },
       { text: 'Pulang Cepat', value: 'pulang_cepat', sortable: false, align: 'left' },
       { text: 'Alpha', value: 'alpa', sortable: false, align: 'left' },
+      { text: 'Dinas Luar', value: 'dl', sortable: false, align: 'left' },
       { text: 'Cuti', value: 'cuti', sortable: false, align: 'left' },
       { text: 'Izin', value: 'ijin', sortable: false, align: 'left' },
       { text: 'Sakit', value: 'sakit', sortable: false, align: 'left' }
@@ -87,15 +151,14 @@ export default {
     tempAdded: []
   }),
   components: {
-    dialogSync,
-    dialogAddAll,
-    dialogDelete
+    dialogSync
   },
   computed: {
     ...mapState({
       reports: 'presencesreports'
     }),
     ...mapGetters({
+      userData: 'usersauthentication/current',
       reportsList: 'presencesreports/list'
     }),
     loadData () {
@@ -117,6 +180,9 @@ export default {
   created () {
     this.$store.commit('presencesreports/clearAll')
     this.initialize()
+    this.$root.$on('openDialogFilterReport', () => {
+      this.filterTable = !this.filterTable
+    })
   },
   watch: {
     pagination: {
@@ -126,8 +192,12 @@ export default {
           this.sortValue = {
             [sortBy]: (val.descending === true) ? -1 : 1
           }
+          var { bulan, tahun } = this.monthYear()
           let params = {
             query: {
+              organization: this.userData.organization._id,
+              month: bulan,
+              year: tahun,
               $sort: this.sortValue
             }
           }
@@ -141,46 +211,80 @@ export default {
     onResize () {
       resizeTable(this, window, 'reports')
     },
-    initialize () {
+    momentBulan () {
+      var mBulan = moment.months()
+      return {
+        mBulan
+      }
+    },
+    momentTahun () {
+      var mTahun = moment.year()
+      // console.log(moment().diff('1981', 'years'))
+      return {
+        mTahun
+      }
+    },
+    monthYear () {
+      var bulan
+      var tahun
+      // console.log(this.pilih_tahun)
+      if (this.pilih_bulan === null || this.pilih_tahun === null) {
+        bulan = (new Date()).getMonth() + 1
+        tahun = (new Date()).getFullYear()
+      } else {
+        bulan = this.pilih_bulan
+        tahun = this.pilih_tahun
+      }
+      return {
+        bulan, tahun
+      }
+    },
+    onSubmit () {
+      var { bulan, tahun } = this.monthYear()
       let params = {
-        query: {}
+        query: {
+          organization: this.userData.organization._id,
+          month: bulan,
+          year: tahun,
+          $sort: this.sortValue
+        }
       }
       this.$store.dispatch('presencesreports/find', params)
+        .then(response => {
+          if (response) {
+            this.filterTable = false
+            this.resetAll()
+          }
+        })
+    },
+    closedialogButton () {
+      this.filterTable = !this.filterTable
+      this.resetAll()
+    },
+    resetAll () {
+      this.pilih_tahun = null
+      this.pilih_bulan = null
+    },
+    initialize () {
+      var { bulan, tahun } = this.monthYear()
+      let paramsOrganization = {
+        query: {
+          organization: this.userData.organization._id, month: bulan, year: tahun
+        }
+      }
+      this.$store.dispatch('presencesreports/find', paramsOrganization)
         .then(response => {
           this.total = response.total
           this.$store.dispatch('setNavigationCount', this.total)
         })
       this.$store.dispatch('setNavigationCount', this.total)
-      api.service('presencesreports').on('created', (doc) => {
-        if (this.tempAdded.length === 0) {
-          this.tempAdded.push(doc._id)
-        } else {
-          if (this.tempAdded.find((i) => i !== doc._id)) {
-            this.tempAdded.push(doc._id)
-          }
-        }
-      })
-      api.service('fingersusers').on('created', (doc) => {
-        let item = this.items.find((i) => i.user._id === doc.user)
-        if (item) {
-          item.fingersusers = doc
-          this.$store.commit('fingersusers/updateItem', item)
-        }
-      })
-      api.service('presencesreports').on('removed', (doc) => {
-        if (this.tempAdded.length > 0) {
-          this.tempAdded.splice(this.tempAdded[this.tempAdded.indexOf(doc._id)], 1)
-        } else {
-          this.total--
-        }
-      })
-      this.$store.dispatch('organizationsselect/find', params)
+      this.$store.dispatch('presencesreports/find', paramsOrganization)
     },
     getNextPage () {
+      var { bulan, tahun } = this.monthYear()
       if (!this.scrollBottom) {
         this.nextPage = false
       }
-
       if (this.scrollBottom && !this.nextPage && this.items.length < this.reports.pagination.default.total) {
         this.nextPage = true
         this.skipPage++
@@ -190,6 +294,9 @@ export default {
         }
         let params = {
           query: {
+            organization: this.userData.organization._id,
+            month: bulan,
+            year: tahun,
             $sort: this.sortValue,
             $skip: skipValue
           }
@@ -200,10 +307,6 @@ export default {
     // syncItem () {
     //   this.$root.$emit('openDialogSyncMachinesusers')
     // },
-    deleteItem (item) {
-      this.$store.commit('presencesreports/setCurrent', item)
-      this.$root.$emit('opendialogDeleteMachineUsers')
-    },
     changeOrderUp (items, item) {
       let _upId = items.find((i) => i.order === (item.order - 1))
       let _select = {

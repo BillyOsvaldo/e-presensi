@@ -17,6 +17,20 @@ export function parseFormDate (date) {
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
 }
 
+export function formatFormTime (time) {
+  if (!time && !moment(time).isValid()) {
+    return null
+  }
+  return time
+}
+
+export function parseFormTime (time) {
+  if (!time) {
+    return null
+  }
+  return time
+}
+
 export function justNameFormat (data) {
   return data.first_name + ' ' + data.last_name
 }

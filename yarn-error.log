@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/bin/yarn run dev
+  /usr/bin/node /usr/bin/yarn ru dev
 
 PATH: 
   /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/java-8-oracle/bin:/usr/lib/jvm/java-8-oracle/db/bin:/usr/lib/jvm/java-8-oracle/jre/bin
@@ -39,13 +39,13 @@ npm manifest:
       "fullcalendar": "^3.9.0",
       "jquery": "^3.3.1",
       "js-cookie": "^2.2.0",
-      "moment": "^2.20.1",
+      "moment": "^2.22.1",
       "node-sass": "^4.9.0",
       "nuxt": "^1.4.0",
       "sass-loader": "^6.0.6",
       "socket.io-client": "^2.0.4",
       "vee-validate": "^2.0.0-rc.26",
-      "vue-full-calendar": "^2.5.4",
+      "vue-json-excel": "^0.2.5",
       "vuetify": "^1.0.16"
     },
     "devDependencies": {
@@ -856,7 +856,7 @@ Lockfile:
     dependencies:
       regenerator-transform "^0.10.0"
   
-  babel-plugin-transform-runtime@^6.15.0, babel-plugin-transform-runtime@^6.23.0:
+  babel-plugin-transform-runtime@^6.15.0:
     version "6.23.0"
     resolved "https://registry.yarnpkg.com/babel-plugin-transform-runtime/-/babel-plugin-transform-runtime-6.23.0.tgz#88490d446502ea9b8e7efb0fe09ec4d99479b1ee"
     dependencies:
@@ -2119,6 +2119,10 @@ Lockfile:
       dom-serializer "0"
       domelementtype "1"
   
+  downloadjs@^1.4.7:
+    version "1.4.7"
+    resolved "https://registry.yarnpkg.com/downloadjs/-/downloadjs-1.4.7.tgz#f69f96f940e0d0553dac291139865a3cd0101e3c"
+  
   duplexer@^0.1.1:
     version "0.1.1"
     resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.1.tgz#ace6ff808c1ce66b57d1ebf97977acb02334cfc1"
@@ -2881,7 +2885,7 @@ Lockfile:
       mkdirp ">=0.5 0"
       rimraf "2"
   
-  fullcalendar@^3.4.0, fullcalendar@^3.9.0:
+  fullcalendar@^3.9.0:
     version "3.9.0"
     resolved "https://registry.yarnpkg.com/fullcalendar/-/fullcalendar-3.9.0.tgz#b608a9989f3416f0b1d526c6bdfeeaf2ac79eda5"
     dependencies:
@@ -3864,10 +3868,6 @@ Lockfile:
     version "4.5.0"
     resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
   
-  lodash.defaultsdeep@^4.6.0:
-    version "4.6.0"
-    resolved "https://registry.yarnpkg.com/lodash.defaultsdeep/-/lodash.defaultsdeep-4.6.0.tgz#bec1024f85b1bd96cbea405b23c14ad6443a6f81"
-  
   lodash.isobject@^3.0.2:
     version "3.0.2"
     resolved "https://registry.yarnpkg.com/lodash.isobject/-/lodash.isobject-3.0.2.tgz#3c8fb8d5b5bf4bf90ae06e14f2a530a4ed935e1d"
@@ -4138,7 +4138,7 @@ Lockfile:
     dependencies:
       minimist "0.0.8"
   
-  moment@^2.20.1:
+  moment@^2.20.1, moment@^2.22.1:
     version "2.22.1"
     resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.1.tgz#529a2e9bf973f259c9643d237fda84de3a26e8ad"
   
@@ -6759,17 +6759,15 @@ Lockfile:
     dependencies:
       indexof "0.0.1"
   
-  vue-full-calendar@^2.5.4:
-    version "2.5.4"
-    resolved "https://registry.yarnpkg.com/vue-full-calendar/-/vue-full-calendar-2.5.4.tgz#1760c2343bc9d66149a29e94e6f763f43b5429f4"
-    dependencies:
-      babel-plugin-transform-runtime "^6.23.0"
-      fullcalendar "^3.4.0"
-      lodash.defaultsdeep "^4.6.0"
-  
   vue-hot-reload-api@^2.2.0:
     version "2.3.0"
     resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.0.tgz#97976142405d13d8efae154749e88c4e358cf926"
+  
+  vue-json-excel@^0.2.5:
+    version "0.2.5"
+    resolved "https://registry.yarnpkg.com/vue-json-excel/-/vue-json-excel-0.2.5.tgz#acafd717157bbdb63eb65b36b8f80c88dcebb25e"
+    dependencies:
+      downloadjs "^1.4.7"
   
   vue-loader@13.7.0:
     version "13.7.0"
@@ -7099,16 +7097,14 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/yeast/-/yeast-0.1.2.tgz#008e06d8094320c372dbc2f8ed76a0ca6c8ac419"
 
 Trace: 
-  Error: Command failed.
-  Exit code: 1
-  Command: sh
-  Arguments: -c HOST=0.0.0.0 PORT=3001 nuxt
-  Directory: /home/dinkominfo/Documents/VUE/e-presensi/e-presensi
-  Output:
-  
-      at ProcessTermError.MessageError (/usr/lib/node_modules/yarn/lib/cli.js:186:110)
-      at new ProcessTermError (/usr/lib/node_modules/yarn/lib/cli.js:226:113)
-      at ChildProcess.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:30281:17)
-      at ChildProcess.emit (events.js:180:13)
-      at maybeClose (internal/child_process.js:936:16)
-      at Process.ChildProcess._handle.onexit (internal/child_process.js:220:5)
+  Error: Command "ru" not found.
+      at new MessageError (/usr/lib/node_modules/yarn/lib/cli.js:186:110)
+      at /usr/lib/node_modules/yarn/lib/cli.js:87307:17
+      at Generator.next (<anonymous>)
+      at step (/usr/lib/node_modules/yarn/lib/cli.js:98:30)
+      at /usr/lib/node_modules/yarn/lib/cli.js:116:14
+      at new Promise (<anonymous>)
+      at new F (/usr/lib/node_modules/yarn/lib/cli.js:23451:28)
+      at /usr/lib/node_modules/yarn/lib/cli.js:95:12
+      at runCommand (/usr/lib/node_modules/yarn/lib/cli.js:87312:22)
+      at Object.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:87412:14)

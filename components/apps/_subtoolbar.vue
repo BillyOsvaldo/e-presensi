@@ -3,7 +3,11 @@
     <v-toolbar flat light color="white" style="padding: 0 8px;">
       <v-toolbar-title>{{ this.menu.name }}<span v-if="count" class="count">({{count}})</span></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon v-if="$route.path === '/manages/reports'">
+      <v-btn
+        icon
+        @click.native="actionFilter"
+        v-if="$route.path === '/manages/reports'"
+      >
         <v-icon>filter_list</v-icon>
       </v-btn>
       <v-btn icon v-if="false">
@@ -15,7 +19,14 @@
 </template>
 <script>
 import {mapGetters} from 'vuex'
+import moment from 'moment'
 export default {
+  data () {
+    return {
+      moment: moment,
+      menuFilter: false
+    }
+  },
   computed: {
     ...mapGetters({
       menuList: 'menus/list',
@@ -23,6 +34,13 @@ export default {
     }),
     menu () {
       return this.menuList.find((item) => item.to === this.$route.path)
+    }
+  },
+  methods: {
+    actionFilter () {
+      if (this.$route.path === '/manages/reports') {
+        this.$root.$emit('openDialogFilterReport')
+      }
     }
   }
 }
