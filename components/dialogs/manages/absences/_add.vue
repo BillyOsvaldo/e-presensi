@@ -7,30 +7,29 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12>
-                <v-select
+                <v-autocomplete
                   autofocus
                   label="Pilih Pengguna"
-                  autocomplete
                   v-bind:items="item_users"
                   item-text="user"
+                  item-value="_id"
                   v-validate="'required'"
                   data-vv-name="user"
                   :error-messages="errors.collect('user')"
                   v-model="user"
-                ></v-select>
+                ></v-autocomplete>
               </v-flex>
               <v-flex xs12>
-                <v-select
-                  autofocus
+                <v-autocomplete
                   label="Pilih Jenis Ketidakhadiran"
-                  autocomplete
                   v-bind:items="item_absencestypes"
                   item-text="absencestype"
+                  item-value="_id"
                   v-validate="'required'"
                   data-vv-name="absencestype"
                   :error-messages="errors.collect('absencestype')"
                   v-model="absencestype"
-                ></v-select>
+                ></v-autocomplete>
               </v-flex>
               <v-flex>
                 <v-menu
@@ -122,7 +121,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat @click.native="closedialogAddButton">Batal</v-btn>
-          <v-btn flat color="blue darken-1"
+          <v-btn flat color="primary"
             @click.native="postCreated">Tambah</v-btn>
         </v-card-actions>
       </v-card>
@@ -162,6 +161,7 @@
       dialogAdd: false,
       loading: false,
       search: null,
+      user: null,
       absencestype: null,
       desc: null,
       menu_startDate: false,
@@ -220,7 +220,7 @@
             .then((result) => {
               if (result) {
                 let newAbsence = {
-                  user: this.user._id,
+                  user: this.user,
                   absencestype: this.absencestype,
                   startDate: parseFormDate(this.startDate),
                   endDate: parseFormDate(this.endDate),

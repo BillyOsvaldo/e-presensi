@@ -171,7 +171,6 @@
                 }
                 let params = {}
                 this.$store.commit('settings/clearPatchError')
-                console.log('saadsadadas', this.time, this.value)
                 this.$store.dispatch('settings/patch', [this.settings._id, data, params])
                   .then(response => {
                     if (response) {

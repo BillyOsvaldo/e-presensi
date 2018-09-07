@@ -43,13 +43,17 @@ export default {
       value: 0,
       total: 0,
       disableBtn: false,
-      finish: false
+      finish: false,
+      userInMachines: [],
+      userInServer: [],
+      currentSync: {},
+      onSyncUser: false
     }
   },
   computed: {
     ...mapState({}),
     ...mapGetters({
-      userData: 'usersauthentication/current',
+      user: 'usersauthentication/current',
       usersList: 'findusersbyorganization/list',
       machineUsersList: 'findmachinesusersbyorganization/list'
     })
@@ -68,40 +72,40 @@ export default {
       this.dialogSync = !this.dialogSync
       this.resetAll()
     },
-    syncData () {
+    async syncData () {
+      // const sleep = ms => new Promise(res => setTimeout(res, ms))
+      // add user and remove user
       let count = 0
-      let timeout = 0
-      // add User
-      this.usersList.forEach((item) => {
-        setTimeout(() => {
-          count++
-          this.value = Math.floor(count / this.total * 100)
-          if (!(this.machineUsersList.find((i) => i.user === item._id))) {
-            let itemAdd = {
-              user: item._id,
-              organization: this.userData.organization._id
-            }
-            this.$store.dispatch('machinesusersmanagement/create', itemAdd)
+      for (let item of this.usersList) {
+        count++
+        this.value = Math.floor(count / this.total * 100)
+        console.log('item', item._id)
+        console.log('compare', this.machineUsersList)
+        if (!(this.machineUsersList.find((i) => i.user._id === item._id))) {
+          console.log('add!!')
+          let itemAdd = {
+            user: item._id,
+            organization: this.user.organizationuser.organization._id
           }
-        }, (timeout++) * 1000)
-      })
+          await this.$store.dispatch('machinesusersmanagement/create', itemAdd)
+          await this.sleep(500)
+        }
+      }
 
-      // remove User
-      this.machineUsersList.forEach((item) => {
-        setTimeout(() => {
-          count++
-          this.value = Math.floor(count / this.total * 100)
-          if (!(this.usersList.find((i) => i._id === item.user))) {
-            this.$store.dispatch('machinesusersmanagement/remove', item._id)
-          }
-        }, (timeout++) * 1000)
-      })
+      for (let item of this.machineUsersList) {
+        count++
+        this.value = Math.floor(count / this.total * 100)
+        if (!(this.usersList.find((i) => i._id === item.user._id))) {
+          await this.$store.dispatch('machinesusersmanagement/remove', item._id)
+          await this.sleep(500)
+        }
+      }
     },
     processSync () {
       this.disableBtn = true
       let params = {
         query: {
-          organization: this.userData.organization._id
+          'organization': this.user.organizationuser.organization._id
         }
       }
       this.$store.dispatch('findusersbyorganization/find', params)
@@ -109,6 +113,7 @@ export default {
           this.total += response.total
           this.$store.dispatch('findmachinesusersbyorganization/find', params)
             .then(response => {
+              console.log('resp', response)
               this.total += response.total
               this.syncData()
             })
@@ -123,6 +128,9 @@ export default {
       this.$store.commit('machinesmanagement/clearRemoveError')
       this.$store.commit('findusersbyorganization/clearAll')
       this.$store.commit('findmachinesusersbyorganization/clearAll')
+    },
+    sleep (ms) {
+      return new Promise(resolve => setTimeout(resolve, ms))
     }
   },
   created () {

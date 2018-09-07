@@ -95,6 +95,7 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('setBreadcrumbs', [])
     this.$store.commit('settings/clearAll')
     this.initialize()
   },

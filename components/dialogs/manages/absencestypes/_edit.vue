@@ -18,7 +18,6 @@
               </v-flex>
               <v-flex xs12>
                 <v-text-field
-                  autofocus
                   v-model="desc"
                   v-validate="'required'"
                   data-vv-name="desc"
@@ -32,7 +31,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat @click.native="closedialogEditButton">Batal</v-btn>
-          <v-btn flat color="blue darken-1"
+          <v-btn flat color="primary"
             @click.native="postCreated">Ubah</v-btn>
         </v-card-actions>
       </v-card>

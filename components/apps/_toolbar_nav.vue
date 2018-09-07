@@ -1,36 +1,52 @@
 <template>
   <div>
-    <v-toolbar flat dark color="primary" style="padding: 0 8px;">
+    <v-toolbar
+      v-resize="onResize" 
+      :height="htoolbar" 
+      flat
+      dark
+      indigo
+      color="primary"
+      style="padding: 0 8px;">
       <v-toolbar-side-icon @click.stop="isOpen = !isOpen"></v-toolbar-side-icon>
       <v-toolbar-title class="white--text">{{appName}}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon color="white--text">
-        <v-icon>search</v-icon>
-      </v-btn>
       <v-menu
+        light
         offset-x
         :close-on-content-click="false"
-        :nudge-width="300"
+        :nudge-width="320"
         absolute
         v-model="menuApps"
+        content-class="toolbar-right__menu apps"
       >
         <v-btn slot="activator" icon color="white--text">
           <v-icon>apps</v-icon>
         </v-btn>
         <v-card>
           <v-list>
-            
+            <v-list-tile 
+              class="item-list"
+              avatar
+              :href="item.url"
+              v-for="item in appList" :key="item._id" @click="clickApp(item)">
+              <v-list-tile-avatar tile size="48">
+                <img :src="item.image">
+              </v-list-tile-avatar>
+              <span class="title-item">{{item.name}}</span>
+            </v-list-tile>
           </v-list>
         </v-card>
       </v-menu>
       <v-menu
+        light
         offset-x
         :close-on-content-click="false"
         :nudge-width="300"
-        absolute
         v-model="menuProfile"
+        content-class="toolbar-right__menu"
       >
-        <v-avatar slot="activator" size="36px" style="margin: 0 16px; cursor: pointer;" class="grey">
+        <v-avatar slot="activator" size="36px" style="margin: 0; cursor: pointer;" class="grey darken-3">
           <span class="white--text headline">{{ avatarName }}</span>
         </v-avatar>
         <v-card>
@@ -62,12 +78,16 @@
       >
       <v-list class="pa-1">
         <v-list-tile avatar>
+          <v-list-tile-avatar>
+            <img :src="appLogo">
+          </v-list-tile-avatar>
           <v-list-tile-content>
-            <v-list-tile-title style="font-size: 24px;
-            font-weight: 400;">{{appName}}</v-list-tile-title>
+            <v-list-tile-title style="font-size: 20px;
+    font-weight: 400;">{{appName}}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
+      <v-divider></v-divider>
       <v-list class="pt-0">
         <v-list-tile
         v-for="item in menuList"
@@ -97,13 +117,20 @@
         appName: '',
         isOpen: null,
         menuProfile: false,
-        menuApps: false
+        menuApps: false,
+        htoolbar: 64,
+        windowSize: {
+          x: 0,
+          y: 0
+        }
       }
     },
     computed: {
       ...mapGetters({
         menuapp: 'menus/list',
-        user: 'usersauthentication/current'
+        user: 'usersauthentication/current',
+        profile: 'profiles/current',
+        appList: 'applists/list'
       }),
       menuList () {
         let menu = this.menuapp.sort((a, b) => {
@@ -141,17 +168,27 @@
       toProfile () {
         this.menuProfile = false
         window.location = process.env.HOST_URL_SSO + '/profile'
+      },
+      clickApp (item) {
+        window.location = item.url
+      },
+      onResize () {
+        if (window.innerWidth > 720) {
+          this.htoolbar = 64
+        } else {
+          this.htoolbar = 56
+        }
       }
     },
     created () {
       this.appName = process.env.APP_NAME
+      this.appLogo = require('~/static/images/' + this.appName.toLowerCase() + '.png')
     }
   }
 </script>
-
 <style lang="sass">
   .pt-0
-    margin-top: 16px
+    margin-top: 8px
   .list__tile.list__tile--active
     color: rgba(0,0,0,0.87)
     opacity: 1
@@ -160,4 +197,10 @@
     background: #f7f7f7
   .navigation-drawer__border
     display: none
+  .toolbar .toolbar__content > .btn:first-child
+    margin: 0
+    width: 48px
+    height: 48px
+  .toolbar .toolbar__content > :not(.btn):not(.menu):first-child:not(:only-child)
+    margin: 16px
 </style>

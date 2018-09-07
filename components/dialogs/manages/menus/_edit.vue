@@ -83,7 +83,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat @click.native="closeDialogButton">Batal</v-btn>
-          <v-btn flat color="blue darken-1"
+          <v-btn flat color="primary"
             @click.native="postUpdate">Ubah</v-btn>
         </v-card-actions>
       </v-card>

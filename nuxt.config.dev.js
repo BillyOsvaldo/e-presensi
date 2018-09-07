@@ -57,8 +57,8 @@ module.exports = {
     APP_NAME: process.env.APP_NAME || 'e-Presensi',
     ID_APP: process.env.ID_APP || '5a120571cbf7231cdf7e9073',
     DOMAIN: process.env.DOMAIN || 'purbalinggakab.go.id',
-    HOST_URL_SSO: process.env.HOST_URL_SSO || 'https://e-akun.purbalinggakab.go.id',
-    HOST_URL_EPRESENSI: process.env.HOST_URL_EPRESENSI || 'https://e-presensi.purbalinggakab.go.id',
+    HOST_URL_SSO: process.env.HOST_URL_SSO || 'http://localhost:3000',
+    HOST_URL_EPRESENSI: process.env.HOST_URL_EPRESENSI || 'http://localhost:8081',
     HOST_URL_API_EPRESENSI: process.env.HOST_URL_API_EPRESENSI || 'https://api.e-presensi.purbalinggakab.go.id'
   }
 }

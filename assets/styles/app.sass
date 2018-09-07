@@ -2,10 +2,13 @@ html
   overflow: hidden
 
 ::-webkit-scrollbar
-  height: 16px
+  height: 10px
   overflow: visible
   visibility: visible
-  width: 16px
+  width: 10px
+
+::-webkit-scrollbar-track
+  background-color: #eeeeee
 
 ::-webkit-scrollbar-button
   height: 0
@@ -15,45 +18,516 @@ html
   background: transparent
 
 ::-webkit-scrollbar-thumb
-  background-color: rgba(0,0,0,0.2)
   background-clip: padding-box
-  border: solid transparent
-  border-width: 1px 1px 1px 6px
-  min-height: 28px
-  padding: 100px 0 0
-  box-shadow: inset 1px 1px 0 rgba(0,0,0,0.1), inset 0 -1px 0 rgba(0,0,0,0.07)
+  background-color: #bdbdbd
+  -webkit-border-radius: 6px
+  border-radius: 6px
 
-::-webkit-scrollbar-track
-  background-clip: padding-box
-  border: solid transparent
-  border-width: 0 0 0 4px
+.theme--light
+  .v-toolbar__content
+    padding: 0px
+  .nav-menu-list
+    margin-top: 8px
+    .v-list__tile__title
+      font-size: 13px
+    .v-list__tile.v-list__tile--active
+      color: rgba(0,0,0,0.87)
+      opacity: 1
+      background: #eee
+    .v-list__tile--link:hover
+      background: #f7f7f7
+    .v-navigation-drawer__border
+      display: none
+      
+  .subtoolbar
+    .v-toolbar
+      -webkit-box-shadow: 0 8px 10px -9px rgba(0,0,0,0.05), 0 3px 14px 2px rgba(0,0,0,0.01), 0 5px 5px -3px rgba(0,0,0,0.05)
+      box-shadow: 0 8px 10px -9px rgba(0,0,0,0.05), 0 3px 14px 2px rgba(0,0,0,0.01), 0 5px 5px -3px rgba(0,0,0,0.05)
+      z-index: 2
+  .v-toolbar
+    .v-toolbar__content >
+      .v-btn:first-child
+        margin: 0
+        width: 48px
+        height: 48px
+      \:not(.v-btn):not(.v-menu):first-child:not(:only-child)
+        margin: 16px
+    .v-breadcrumbs
+      padding: 0 0 0 16px
+      li
+        .v-breadcrumbs__item
+          opacity: .54
+          color: #000
+          &.v-breadcrumbs__item--disabled
+            opacity: 1
+        &.v-breadcrumbs__divider
+          padding: 0 4px
 
-.card__title
-  padding: 24px 24px 20px 24px
+  .toolbar-right__menu
+    top: 62px !important
+    right: 8px !important
+    left: unset !important
+    &.apps
+      max-height: 359px
+      .v-list
+        background: #fff
+        margin: 0
+        min-height: 100px
+        padding: 28px
+        padding-right: 27px
+        text-align: left
+        white-space: normal
+        .item-list
+          padding: 1px
+          display: inline-block
+          vertical-align: top
+          color: black
+          z-index: 999
+          height: 98px
+          width: 86px
+          position: relative
+          &:hover
+            a
+              border: 1px solid #e5e5e5
+              -webkit-border-radius: 2px
+              border-radius: 2px
+              margin: 7px 1px
+              background-color: #fff
+              span
+                text-decoration: underline
+          .v-list__tile
+            padding: 0
+            height: auto
+            position: absolute
+            -webkit-transition: unset
+            transition: unset
+            .v-list__tile__avatar
+              display: inline-block
+              vertical-align: top
+              height: 64px
+              width: 64px
+              .v-avatar
+                height: 48px
+                width: 48px
+                margin: 8px
+            .title-item
+              display: block
+              line-height: 20px
+              overflow: hidden
+              white-space: nowrap
+              width: 84px
+              text-overflow: ellipsis
+      .v-list__tile
+        color: rgba(0,0,0,0.87)
+        display: inline-block
+        font-size: 13px
+        margin: 8px 2px
+        text-align: center
+        outline: none
 
-.card__text
-  padding: 0 24px
 
-.card__actions
-  padding: 24px 8px 8px
-  .btn
-    margin: 0 8px 0 0
-    &:last-child
-      margin: 0
+  .v-card__title
+    padding: 24px 24px 20px 24px
 
-.btn--floating--custom
-  right: 108px
-  bottom: 48px !important
+  .v-card__text
+    padding: 0 24px
 
-table.table
-  tbody
-    tr
-      &:not(:last-child)
-        border-bottom: none !important
-    td
-      height: 59px
-      button
-        margin: 12px 0
+  .v-card__actions
+    padding: 24px 8px 8px
+    .v-btn
+      margin: 0 8px 0 0
+      &:last-child
+        margin: 0
 
-th.action
-  color: transparent !important
+  .v-btn--floating--custom
+    top: 150px
+    left: 20px
+    &.fullwidth
+      display: none
+    @media only screen and (max-width: 1023px)
+      right: 20px
+      bottom: 40px
+      top: unset
+      left: unset
+    @media only screen and (max-width: 1263px)
+      &.fullwidth
+        display: block
+        bottom: 56px
+        right: 20px
+        top: unset
+        left: unset
+
+  .v-autocomplete__table-filter
+    width: 340px
+    min-width: 340px !important
+    margin-top: 7px
+    .v-list
+      padding: 0px
+    .v-list__tile
+      height: 40px
+
+  .v-dialog
+    .v-card
+     .container
+        padding: 8px
+
+  .v-dialog__datatable-filter
+    margin: 0px
+    position: absolute
+    margin-top: -50px
+    margin-left: -2px
+
+  .title-menu
+    font-weight: 500
+    overflow: hidden
+    padding-top: 10px
+    text-overflow: ellipsis
+    text-align: center
+    white-space: normal
+    font-size: 14px
+  .desc-menu
+    margin-top: 4px
+    overflow: hidden
+    text-align: center
+    text-overflow: ellipsis
+    white-space: normal
+    font-weight: 400
+    font-size: 12px
+    opacity: .87
+  .line-menu
+    line-height: 1.4
+  .menu-item
+    text-align: center
+    padding: 16px
+    cursor: pointer
+    width: 196px
+    &:hover
+      background: #cccccc4d
+  .menu-item-content
+    p
+      height: 36px
+      font-size: 12px
+
+.no-select
+  -webkit-touch-callout: none
+  -webkit-user-select: none
+  -khtml-user-select: none
+  -moz-user-select: none
+  -ms-user-select: none
+  user-select: none
+  
+.cursor__default
+  cursor: default
+
+.__main-content
+  -webkit-box-flex: 1 1 auto
+  -webkit-flex: 1 1 auto
+  flex: 1 1 auto
+  height: 100%
+  overflow: hidden
+  position: relative
+  background-color: #eceded
+.role-grid
+  padding-top: 24px
+  padding: 0 48px
+  position: absolute
+  top: 0
+  bottom: 0
+  right: 0
+  left: 0
+.content-flex
+  display: -webkit-box
+  display: -moz-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-flex-direction: column
+  flex-direction: column
+  position: relative
+  background-color: #fff
+  .loader__datatable
+    position: absolute
+    top: 114px
+    height: 3px
+    margin: 0
+    width: 100%
+  .flex__
+    -webkit-flex-shrink: 0
+    flex-shrink: 0
+    .flex__filter
+      -webkit-align-items: center
+      align-items: center
+      -webkit-box-shadow: inset 0 -1px 0 #e0e0e0
+      box-shadow: inset 0 -1px 0 #e0e0e0
+      -webkit-box-sizing: border-box
+      box-sizing: border-box
+      display: -webkit-box
+      display: -moz-box
+      display: -webkit-flex
+      display: -ms-flexbox
+      display: flex
+      -webkit-flex-shrink: 0
+      flex-shrink: 0
+      -webkit-flex-wrap: wrap
+      flex-wrap: wrap
+      outline: none
+      padding: 8px 12px 8px 0
+      padding-left: 16px
+      width: 100%
+      position: relative
+      .v-input
+        margin-top: 0px !important
+        padding-top: 0px
+        .v-label
+          top: 12px
+      .v-input__slot
+        &:before, &:after
+          border: none !important
+      .v-input__append-inner
+        display: none
+  .flex__content
+    -webkit-box-align: center
+    box-align: center
+    -webkit-align-items: center
+    align-items: center
+    display: -webkit-box
+    display: -moz-box
+    display: -ms-flexbox
+    display: -webkit-flex
+    display: flex
+    box-pack: justify
+    -webkit-justify-content: space-between
+    justify-content: space-between
+  .flex__header--content
+    border-bottom: 1px solid #e0e0e0
+    -webkit-flex-shrink: 0
+    flex-shrink: 0
+    min-height: 56px
+    padding: 0 10px
+.header__content--title
+  color: rgba(0,0,0,0.54)
+  font-size: 16px
+  font-weight: 500
+  padding: 0 14px
+  .header--title
+    color: rgba(0,0,0,0.87)
+.header__content
+  overflow: auto
+  padding: 0 0 0 22px
+  word-break: break-all
+  word-wrap: break-word
+.__data-table
+  display: -webkit-box
+  display: -moz-box
+  display: -ms-flexbox
+  display: -webkit-flex
+  display: flex
+  -webkit-flex-direction: column
+  flex-direction: column
+  -webkit-box-flex: 1
+  box-flex: 1
+  -webkit-flex-grow: 1
+  flex-grow: 1
+  position: relative
+  height: 100%
+  min-height: 0
+  .v-table
+    table-layout: fixed
+    position: relative
+    min-width: 100%
+    border-collapse: collapse
+    white-space: nowrap
+    width: unset !important
+    max-width: unset !important
+    thead
+      tr
+        height: unset !important
+        display: block
+        position: relative
+        width: 100%
+        &:first-child
+          background: #f5f5f5
+          border-bottom: 1px solid #e0e0e0
+        .w-default
+          width: 100%
+          min-width: 100%
+          max-width: 100%
+        .w-space
+          .__content
+            padding-left: 32px !important
+        .w-large
+          width: 272px
+          min-width: 272px
+          max-width: 272px
+        .w-xlarge
+          width: 360px
+          min-width: 360px
+          max-width: 360px
+        .w-normal
+          width: 190px
+          min-width: 190px
+          max-width: 190px
+        .w-dynamic
+          width: 100%
+          min-width: 100%
+          max-width: 100%
+        .w-select
+          width: 68px
+          min-width: 68px
+          max-width: 68px
+          padding-left: 32px !important
+        .w-action
+          width: 178px
+          min-width: 178px
+          max-width: 178px
+          &.w-action--1
+            width: 68px
+            min-width: 68px
+            max-width: 68px
+          &.w-action--2
+            width: 128px
+            min-width: 128px
+            max-width: 128px
+          .__content
+            display: none
+        th
+          padding: 0px !important
+          .__content
+            display: block
+            padding: 15px 10px !important
+    tbody
+      display: block
+      overflow: auto
+      overflow-x: hidden
+      position: relative
+      width: 100%
+      tr
+        border-top: 1px solid #e0e0e0
+        outline: none
+        color: #555
+        -webkit-transition: unset
+        transition: unset
+        will-change: unset
+        position: relative
+        &:not(.v-datatable__expand-row)
+          height: 48px
+        &:first-of-type
+          border-top: none
+          .v-action
+            border-bottom: none
+        &:not(last-child)
+          border-bottom: none !important
+        &:last-child
+          border-bottom: 1px solid rgba(0, 0, 0, .12) !important
+        td
+          &:not(.v-datatable__expand-col)
+            height: 49px
+            padding: 0 10px !important
+            div
+              line-height: 15px
+          &.v-datatable__expand-col--expanded
+            border: none;
+          &:first-child
+            color: #333
+          &.__select
+            padding: 0px !important
+            .v-input--checkbox
+              padding: 0 4px 0 32px
+          &.v-action
+            background: linear-gradient(to left,#eeeeee 0%,#eeeeee 93%,rgba(238,238,238,0.01) 100%)
+            background-clip: padding-box
+            opacity: 0
+            // border-bottom: 1px solid #e0e0e0
+          .w-large
+            overflow: hidden
+            text-overflow: ellipsis
+            width: 252px
+          .w-xlarge
+            overflow: hidden
+            text-overflow: ellipsis
+            width: 340px
+          .w-space
+            padding-left: 24px
+          .w-normal
+            overflow: hidden
+            text-overflow: ellipsis
+            width: 170px
+          &.w-dynamic
+            width: 100%
+            max-width: 100%
+            min-width: 100%
+          .w-action
+            overflow: hidden
+            text-overflow: ellipsis
+            width: 158px
+            &.w-action--1
+              width: 48px
+            &.w-action--2
+              width: 108px
+          .content__action
+            -webkit-align-items: center
+            align-items: center
+            display: -webkit-box
+            display: -moz-box
+            display: -webkit-flex
+            display: -ms-flexbox
+            display: flex
+            -webkit-flex-direction: row
+            flex-direction: row
+            -webkit-justify-content: flex-end
+            justify-content: flex-end
+            .btn__action
+              width: 48px
+          .v-datatable__expand-content
+            .v-list
+              padding: 0
+              .v-list__tile
+                border-top: 1px solid #e0e0e0
+                padding: 0 12px 0 48px
+                &:hover
+                  background: #eee
+                  .v-list__tile__action
+                    opacity: 1
+                .v-list__tile__content
+                  .v-list__tile__title
+                    font-size: 13px
+                    color: #333
+                    font-weight: 500
+                    height: auto
+                .v-list__tile__action
+                  opacity: 0
+                  .content__action
+                    height: 48px
+        &:hover
+          background-color: #eeeeee
+          .v-action
+            opacity: 1
+.v-datatable__actions__select
+  @media only screen and (max-width: 693px)
+    display: none
+.v-datatable__actions
+  color: #333 !important
+.v-add-filter__icon
+  -webkit-align-items: center
+  align-items: center
+  -webkit-border-radius: 32px
+  border-radius: 32px
+  border: 1px dashed rgba(0,0,0,0.26)
+  bottom: 13px
+  -webkit-box-sizing: border-box
+  box-sizing: border-box
+  color: rgba(0,0,0,0.54)
+  display: -webkit-box
+  display: -moz-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  height: 32px
+  left: 32px
+  padding: 0 16px 0 8px
+  margin: 0
+  position: absolute;
+  -webkit-transition: opacity .1s cubic-bezier(0.4,0.0,0.2,1)
+  transition: opacity .1s cubic-bezier(0.4,0.0,0.2,1)
+  @media only screen and (max-width: 1023px)
+    left: 16px

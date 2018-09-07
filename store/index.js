@@ -23,12 +23,14 @@ export const storeSocket = new Vuex.Store({
     service('rolesselect'),
     service('permissionsselect'),
     service('machinesmanagement'),
+    service('machinesusers'),
     service('organizationsselect'),
     service('machinesusersmanagement'),
     service('findusersbyorganization'),
     service('findmachinesusersbyorganization'),
     service('fingersusers'),
     service('absencestypesmanagement'),
+    service('absences'),
     service('absencesmanagement'),
     service('absencestypesselect'),
     service('settings'),
@@ -38,62 +40,14 @@ export const storeSocket = new Vuex.Store({
     }),
     service('presences'),
     service('presencesreports'),
-    /* service('userRegistration'),
-    service('userapp'),
-    service('addresses'),
-    service('coderegs'),
-    service('checkcode', {
-      idField: 'code'
+    service('presencestoday'),
+    service('presencestodaysummary'),
+    service('infoorganizations'),
+    service('applists'),
+    service('timeserver', {
+      idField: 'time'
     }),
-    service('resend-email', {
-      idField: 'status'
-    }),
-    service('checkuser', {
-      idField: 'status'
-    }),
-    service('users'),
-    service('profiles'),
-    service('postcodes'),
-    service('organizationusers'),
-    service('organizations'),
-    service('roles'),
-    service('permissions'),
-    service('administrators'),
-    service('apps'),
-    service('usersmanagement'),
-    service('coderegsmanagement'),
-    service('organizationsmanagement'),
-    service('appsmanagement'),
-    service('permissionsmanagement'),
-    service('appsselect'),
-    service('administratorsselect'),
-    service('rolesmanagement'),
-    service('structuresmanagement'),
-    service('organizationsselect'),
-    service('structuresselect'),
-    service('organizationstructuresmanagement'),
-    service('structureparentselect'),
-    service('administratorsmanagement'),
-    service('organizationusersmanagement'),
-    service('usersselect'),
-    service('organizationstructuresusersmanagement'),
-    service('organizationstructuresusersdraftmanagement'),
-    service('organizationstructuresselect'),
-    service('organizationusersexpand'),
-    service('organizationusersdraftmanagement'),
-    service('organizationusersbyuser'),
-    service('organizationstructuresusersbyuser'),
-    service('checkorganizationusers'),
-    service('allorganizationusersdraft'),
-    service('administratorsorganizationsmanagement'),
-    service('permissionsadminorganizationsselect'),
-    service('checkemail', {
-      idField: 'status'
-    }),
-    service('checkusername', {
-      idField: 'status'
-    }),
-    service('administratorpermissionsmanagement'),  */
+    service('presencestodayorganizations'),
     auth(
       {
         state: {

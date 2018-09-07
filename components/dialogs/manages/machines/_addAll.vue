@@ -7,20 +7,20 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12>
-               <v-select
+               <v-autocomplete
+                  autofocus
                   v-model="organization"
                   label="Pilih Organisasi"
-                  autocomplete
                   :items="item_organizations"
                   item-text="organization"
+                  item-value="_id"
                   v-validate="'required'"
                   data-vv-name="organization"
                   :error-messages="errors.collect('organization')"
-                ></v-select>
+                ></v-autocomplete>
               </v-flex>
               <v-flex xs12>
                 <v-text-field
-                  autofocus
                   v-model="name"
                   v-validate="'required'"
                   data-vv-name="name"
@@ -44,7 +44,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat @click.native="closedialogAddButton">Batal</v-btn>
-          <v-btn flat color="blue darken-1"
+          <v-btn flat color="primary"
             @click.native="postCreated">Tambah</v-btn>
         </v-card-actions>
       </v-card>
@@ -112,7 +112,7 @@
               if (result) {
                 let newMachine = {
                   name: this.name,
-                  organization: this.organization._id,
+                  organization: this.organization,
                   dev_id: this.dev_id
                 }
                 this.$store.dispatch('machinesmanagement/create', newMachine)
@@ -140,7 +140,6 @@
     },
     created () {
       this.$root.$on('openDialogAddAllMachines', () => {
-        console.log('addAll')
         this.dialogAdd = true
       })
       this.$validator.localize(customHelptext)

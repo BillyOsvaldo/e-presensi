@@ -1,5 +1,5 @@
 <template>
-  <v-app v-bind="processData">
+  <v-app light v-bind="processData">
     <loader :isShow="isLoading" />
     <flash :isFlash="isFlashing" />
     <toolbarnav v-if="hasToolbarLoaded" />
@@ -67,7 +67,12 @@ export default {
 
       // verified page
       if (this.menuList.length > 0 && this.$route.path) {
-        let _checkMenu = this.menuList.find((item) => item.to === this.$route.path)
+        let path = this.$route.path
+        if (this.$route.params) {
+          let replace = '/' + this.$route.params.id
+          path = path.replace(replace, '')
+        }
+        let _checkMenu = this.menuList.find((item) => item.to === path)
         if (typeof _checkMenu !== 'object') {
           this.verified = false
           this.$router.push('/')
@@ -95,7 +100,6 @@ export default {
   methods: {
     initAuth () {
       if (this.auth.accessToken && this.dataUser) {
-        console.log('accessToken', this.auth.accessToken)
         // this.loadDataUser(this.dataUser)
       } else {
         if (this.auth.payload) {
@@ -107,7 +111,7 @@ export default {
             this.$store.dispatch('usersauthentication/get', this.auth.payload.userId).then((user) => {
               // JWT authentication successful
               if (user) {
-                this.initMenu(user)
+                this.preventAuth(user)
               }
             })
           })
@@ -135,14 +139,41 @@ export default {
       this.$store.dispatch('menus/find', params)
         .then(response => {
           if (response) {
-            // remove absences if not have profile
+            // remove absences & myreport if not have profile
             if (!this.dataUser.profile) {
-              let item = response.data.find((i) => i.name === 'Ketidakhadiran')
-              this.$store.commit('menus/removeItem', item)
+              let itemAbsences = response.data.find((i) => i.name === 'KetidakhadiranKu')
+              this.$store.commit('menus/removeItem', itemAbsences)
+              let itemPresensiKu = response.data.find((i) => i.name === 'PresensiKu')
+              this.$store.commit('menus/removeItem', itemPresensiKu)
             }
             this.hasMenuLoaded = true
           }
         })
+    },
+    initAppList () {
+      let params = {
+        query: {
+          status: true
+        }
+      }
+      this.$store.dispatch('applists/find', params)
+        .then(response => {
+          response.data.forEach((item) => {
+            var image = require('~/static/images/' + item.service + '.png')
+            item.image = image
+            this.$store.commit('applists/updateItem', item)
+          })
+        })
+    },
+    preventAuth (user) {
+      if (user.profile === null &&
+      user.permissions.length === 0 &&
+      user.role.length === 0) {
+        window.location = process.env.HOST_URL_SSO
+      } else {
+        this.initAppList()
+        this.initMenu(user)
+      }
     }
   },
   created () {

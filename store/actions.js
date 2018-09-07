@@ -11,6 +11,9 @@ export default {
       cookieName: 'feathers-jwt'
     })
   },
+  setBreadcrumbs (context, breadcrubs) {
+    context.commit(mutations.SET_BREADCRUMBS, breadcrubs)
+  },
   setNavigationTitle (context, title) {
     context.commit(mutations.SET_NAVIGATION_TITLE, title)
   },

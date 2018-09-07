@@ -1,13 +1,13 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialogDelete" persistent scrollable max-width="480">
-      <v-card v-if="dialogDelete">
-        <v-card-title class="headline">Hapus Ketidakhadiran</v-card-title>
+    <v-dialog v-model="dialogDeleteMenus" persistent scrollable max-width="480">
+      <v-card v-if="dialogDeleteMenus">
+        <v-card-title class="headline">Hapus Menu</v-card-title>
         <v-card-text style="max-height: 300px;">
-          <v-container grid-list-md>
+          <v-container>
             <v-layout wrap>
               <v-flex xs12>
-                Apakah anda ingin menghapus ketidakhadiran ini?
+                Apakah anda ingin menghapus menu ini?
               </v-flex>
             </v-layout>
           </v-container>
@@ -29,37 +29,37 @@ import {mapState, mapGetters} from 'vuex'
 export default {
   data () {
     return {
-      dialogDelete: false
+      dialogDeleteMenus: false
     }
   },
   computed: {
     ...mapState({}),
     ...mapGetters({
-      absences: 'absences/current'
+      menusmanagement: 'menusmanagement/current'
     })
   },
   methods: {
     closeDialogButton () {
-      this.dialogDelete = !this.dialogDelete
+      this.dialogDeleteMenus = !this.dialogDeleteMenus
       this.resetAll()
     },
     postUpdate () {
-      this.$store.commit('absences/clearRemoveError')
-      this.$store.dispatch('absences/remove', this.absences._id)
+      this.$store.commit('menusmanagement/clearRemoveError')
+      this.$store.dispatch('menusmanagement/remove', this.menusmanagement._id)
         .then(response => {
           if (response) {
-            this.dialogDelete = false
+            this.dialogDeleteMenus = false
             this.resetAll()
           }
         })
     },
     resetAll () {
-      this.$store.commit('absences/clearRemoveError')
+      this.$store.commit('menusmanagement/clearRemoveError')
     }
   },
   created () {
-    this.$root.$on('opendialogDeleteAbsence', () => {
-      this.dialogDelete = true
+    this.$root.$on('openDialogDeleteMenus', () => {
+      this.dialogDeleteMenus = true
     })
   }
 }

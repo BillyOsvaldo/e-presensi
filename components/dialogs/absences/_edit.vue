@@ -7,10 +7,9 @@
           <v-container grid-list-md>
             <v-layout wrap v-bind="loadData">
               <v-flex xs12>
-                <v-select
+                <v-autocomplete
                   autofocus
                   label="Pilih Jenis Ketidakhadiran"
-                  autocomplete
                   v-bind:items="item_absencestypes"
                   item-text="absencestype"
                   item-value="_id"
@@ -18,7 +17,7 @@
                   data-vv-name="absencestype"
                   :error-messages="errors.collect('absencestype')"
                   v-model="absencestype"
-                ></v-select>
+                ></v-autocomplete>
               </v-flex>
               <v-flex>
                 <v-menu
@@ -97,7 +96,6 @@
               </v-flex>
               <v-flex xs12>
                 <v-text-field
-                  autofocus
                   v-model="desc"
                   v-validate="'required'"
                   data-vv-name="desc"
@@ -111,7 +109,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat @click.native="closedialogEditButton">Batal</v-btn>
-          <v-btn flat color="blue darken-1"
+          <v-btn flat color="primary"
             @click.native="postCreated">Ubah</v-btn>
         </v-card-actions>
       </v-card>
@@ -161,7 +159,7 @@
       ...mapState({
       }),
       ...mapGetters({
-        absences: 'absencesmanagement/current',
+        absences: 'absences/current',
         dataUser: 'usersauthentication/current',
         absencestypesselect: 'absencestypesselect/list'
       }),
@@ -204,7 +202,6 @@
             .then((result) => {
               if (result) {
                 let data = {
-                  user: this.dataUser._id,
                   absencestype: this.absencestype,
                   startDate: parseFormDate(this.startDate),
                   endDate: parseFormDate(this.endDate),
@@ -212,8 +209,8 @@
                   status: false
                 }
                 let params = {}
-                this.$store.commit('absencesmanagement/clearPatchError')
-                this.$store.dispatch('absencesmanagement/patch', [this.absences._id, data, params])
+                this.$store.commit('absences/clearPatchError')
+                this.$store.dispatch('absences/patch', [this.absences._id, data, params])
                   .then(response => {
                     if (response) {
                       this.dialogEdit = false
@@ -231,7 +228,7 @@
         setTimeout(() => this.$validator.validate(field), 500)
       },
       resetAll () {
-        this.$store.commit('absencesmanagement/clearPatchError')
+        this.$store.commit('absences/clearPatchError')
         this.$validator.reset()
         this.search = null
         this.absencestype = null

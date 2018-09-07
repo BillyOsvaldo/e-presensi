@@ -135,6 +135,7 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('setBreadcrumbs', [])
     this.$store.commit('timesmanagement/clearAll')
     this.initialize()
   },

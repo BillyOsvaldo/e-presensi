@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-    <v-container grid-list-md style="margin-bottom: 120px;">
+    <v-container style="max-width: 100%;">
       <v-layout row wrap>
         <v-flex
           d-flex
-          xs12 sm4 md3
+          xs12 sm4 md3 lg2
           v-for="item in menuList"
           :key="item._id"
           style="padding: 16px;"
@@ -17,8 +17,8 @@
             :to="item.to">
             <div class="menu-item-content">
               <v-icon style="font-size: 54px;" :color="item.color">{{item.icon}}</v-icon>
-              <h2 style="font-weight: 400;">{{item.name}}</h2>
-              <p>{{item.desc}}</p>
+              <div class="title-menu line-menu">{{item.name}}</div>
+              <div class="desc-menu line-menu">{{item.desc}}</div>
             </div>
           </v-card>
         </v-flex>
@@ -42,6 +42,7 @@ export default {
     }
   },
   mounted () {
+    this.$store.dispatch('setBreadcrumbs', [])
     this.$store.dispatch('setNavigationCount', 0)
   }
 }

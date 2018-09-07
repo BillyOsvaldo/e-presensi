@@ -1,206 +1,170 @@
 <template>
-  <div class="absences-content" v-resize="onResize" style="background: #fff;">
-    <v-data-table
-      :headers="headers"
-      :items="items"
-      hide-actions
-      class="absences"
-      id="scroll-target"
-      :pagination.sync="pagination"
-      v-bind="loadData + loadNextPage"
+  <dataTable
+    :menu="menu"
+    :defaultFilter="defaultFilter"
+    :itemsFilter="itemsFilter"
+    :itemsSelectFilter="itemsSelectFilter"
+    :filterItems.sync="filterValue"
+    :paginationDefault="pagination"
+    :pagination.sync="pagination"
+    :headers="headers"
+    :sortBy.sync="sortBy"
+    :serviceName="serviceName"
+    :showFAB.sync="showFAB"
+    :items.sync="items"
+    :additionalFilter="additionalFilter"
     >
-      <template slot="items" slot-scope="props">
-        <td :style="(!props.item.status) ? 'font-weight: bold;' : ''">{{ props.item.user.profile.name.first_name + ' ' + props.item.user.profile.name.last_name }}</td>
-        <td :style="(!props.item.status) ? 'font-weight: bold;' : ''">{{ props.item.absencestype.name }}</td>
-        <td :style="(!props.item.status) ? 'font-weight: bold;' : ''">{{ (props.item.startDate !== props.item.endDate) ? formatDate(props.item.startDate) + ' - ' + formatDate(props.item.endDate) : formatDate(props.item.startDate)}}</td>
-        <td :style="(!props.item.status) ? 'font-weight: bold;' : ''"><v-chip :color="(props.item.status) ? 'green' : ''" :text-color="(props.item.status) ? 'white' : ''">{{ (props.item.status) ? 'Disetujui' : 'Belum disetujui' }}</v-chip></td>
-        <td class="text-xs-center">
-          <div>
-            <v-tooltip
-              :disabled="(props.item.status) ? true : false"
-              top
-              >
-              <v-btn
-                :disabled="(props.item.status) ? true : false"
-                slot="activator" icon class="mx-0" @click.native="reviewItem(props.item)">
-                <v-icon color="grey darken-1">spellcheck</v-icon>
-              </v-btn>
-              <span>Review</span>
-            </v-tooltip>
+    <template slot="items-dataTable" slot-scope="{props}">
+      <tr class="item-dataTable">
+        <td style="font-weight: 500;">
+          <div class="w-space w-large">
+            {{ props.item.user.profile.name.first_name + ' ' + props.item.user.profile.name.last_name }}
           </div>
         </td>
-      </template>
-      <template slot="no-data">
-        <span>Belum ada data.</span>
-      </template>
-    </v-data-table>
-    <dialogAdd/>
-    <dialogReview/>
-    <v-fab-transition>
-      <v-btn
-        class="btn--floating--custom"
-        color="red"
-        dark
-        fixed
-        bottom
-        right
-        fab
-        @click.native="addItem"
-      >
-        <v-icon>add</v-icon>
-      </v-btn>
-    </v-fab-transition>
-  </div>
+        <td>
+          <div class="w-normal">
+            {{ props.item.absencestype.name }}
+          </div>
+        </td>
+        <td>
+          <div class="w-large">
+            {{ (props.item.startDate !== props.item.endDate) ? formatDate(props.item.startDate) + ' - ' + formatDate(props.item.endDate) : formatDate(props.item.startDate)}}
+          </div>
+        </td>
+        <td class="w-dynamic">
+          <div>
+            <v-chip :color="(props.item.status) ? 'green' : ''" :text-color="(props.item.status) ? 'white' : ''">{{ (props.item.status) ? 'Disetujui' : 'Belum disetujui' }}</v-chip>
+          </div>
+        </td>
+        <td class="v-action">
+          <div class="w-action content__action">
+            <div class="btn__action">
+              <v-tooltip
+                v-if="!(props.item.status) ? true : false"
+                top
+                >
+                <v-btn
+                  :disabled="(props.item.status) ? true : false"
+                  slot="activator" icon class="mx-0" @click.native="reviewItem(props.item)">
+                  <v-icon color="grey darken-1">spellcheck</v-icon>
+                </v-btn>
+                <span>Review</span>
+              </v-tooltip>
+            </div>
+            <div class="btn__action">
+              <v-tooltip
+                v-if="!(!props.item.status) ? true : false"
+                top
+                >
+                <v-btn
+                  :disabled="(!props.item.status) ? true : false"
+                  slot="activator" icon class="mx-0" @click.native="cancelItem(props.item)">
+                  <v-icon color="grey darken-1">undo</v-icon>
+                </v-btn>
+                <span>Batalkan</span>
+              </v-tooltip>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </template>
+    <template slot="fab">
+      <v-fab-transition>
+        <v-btn
+          v-show="showFAB"
+          class="v-btn--floating--custom"
+          color="secondary"
+          dark
+          fixed
+          fab
+          @click.native="addItem"
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+      </v-fab-transition>
+    </template>
+    <template slot="dialogs">
+      <dialogAdd/>
+      <dialogReview/>
+      <dialogCancel/>
+    </template>
+  </dataTable>
 </template>
 
 <script>
-import api from '~/api/feathers-client'
-import {mapState, mapGetters} from 'vuex'
+import {mapGetters} from 'vuex'
+import dataTable from '~/components/templates/datatable_pagination'
 import dialogAdd from '~/components/dialogs/manages/absences/_add'
 import dialogReview from '~/components/dialogs/manages/absences/_review'
-import {generateTable, resizeTable, loadData} from '~/utils/datatable'
+import dialogCancel from '~/components/dialogs/manages/absences/_cancel'
 import {defaultDateFormat} from '~/utils/format'
 export default {
   data: () => ({
-    dialog: false,
-    tableCreated: false,
-    scrollBottom: false,
-    nextPage: false,
-    sortValue: {},
-    skipPage: 0,
-    total: 0,
-    windowSize: {
-      x: 0,
-      y: 0
-    },
+    serviceName: 'absencesmanagement',
+    defaultFilter: [],
+    filterValue: [],
+    itemsFilter: [],
+    itemsSelectFilter: [],
     headers: [
-      { text: 'Nama', align: 'left', value: 'user.profile.name.first_name' },
-      { text: 'Jenis Ketidakhadiran', align: 'left', value: 'absencestype.name' },
-      { text: 'Tanggal', align: 'left', sortable: false, value: 'startDate' },
-      { text: 'Status', align: 'left', sortable: false, value: 'status' },
-      { text: 'review', value: 'name', sortable: false, class: 'action' }
+      { text: 'Nama', value: 'user.profile.name.first_name', align: 'left', sortable: true, class: 'w-space w-large' },
+      { text: 'Jenis Ketidakhadiran', value: 'absencestype.name', align: 'left', class: 'w-normal' },
+      { text: 'Tanggal', value: 'startDate', align: 'left', class: 'w-large' },
+      { text: 'Status', value: 'status', align: 'left', class: 'w-normal' },
+      { text: 'action', value: 'name', class: 'w-action' }
     ],
+    additionalFilter: [],
     pagination: {
       sortBy: 'status',
-      rowsPerPage: -1,
-      descending: false
+      rowsPerPage: 10,
+      descending: false,
+      page: 1
     },
-    items: [],
-    doResendEmail: false,
-    snackbarView: false,
-    textSnackbar: '',
-    tempAdded: []
+    sortBy: {
+      'status': 1
+    },
+    showFAB: false,
+    items: []
   }),
   components: {
+    dataTable,
     dialogAdd,
-    dialogReview
+    dialogReview,
+    dialogCancel
   },
   computed: {
-    ...mapState({
-      absences: 'absencesmanagement'
-    }),
     ...mapGetters({
-      userData: 'usersauthentication/current',
-      absencesList: 'absencesmanagement/list'
+      menuList: 'menus/list',
+      user: 'usersauthentication/current'
     }),
-    loadData () {
-      if (typeof this.absencesList !== 'undefined') {
-        this.items = this.absencesList
-        if (this.items.length > 0 && this.tableCreated) {
-          loadData(this, 'absences', this.items.length)
-        }
-        if (this.tempAdded) {
-          let total = this.total + this.tempAdded.length
-          this.$store.dispatch('setNavigationCount', total)
-        }
-      }
-    },
-    loadNextPage () {
-      this.getNextPage()
+    menu () {
+      return this.menuList.find((item) => item.to === this.$route.path).name
     }
   },
-  created () {
-    this.$store.commit('absencesmanagement/clearAll')
-    this.initialize()
-  },
   watch: {
-    pagination: {
-      handler (val) {
-        if (val.sortBy !== null) {
-          let sortBy = val.sortBy.replace('_timestamp', '')
-          this.sortValue = {
-            [sortBy]: (val.descending === true) ? -1 : 1
-          }
-          let params = {
-            query: {
-              $sort: this.sortValue
-            }
-          }
-          this.$store.dispatch('absencesmanagement/find', params)
-        }
-      }
-    },
-    deep: true
+    filterValue (val) {},
+    sortBy (val) {},
+    pagination (val) {}
   },
   methods: {
-    onResize () {
-      resizeTable(this, window, 'absences')
-    },
     initialize () {
-      let params = {
-        query: {}
+      if (this.user.organizationuser.organization) {
+        let filter = {
+          key: 'user.organizationuser.organization._id',
+          type: 'Select',
+          value: this.user.organizationuser.organization._id
+        }
+        this.additionalFilter.push(filter)
       }
-      this.$store.dispatch('absencesmanagement/find', params)
-        .then(response => {
-          this.total = response.total
-          this.$store.dispatch('setNavigationCount', this.total)
-        })
-      this.$store.dispatch('setNavigationCount', this.total)
-      api.service('absencesmanagement').on('created', (doc) => {
-        if (this.tempAdded.length === 0) {
-          this.tempAdded.push(doc._id)
-        } else {
-          if (this.tempAdded.find((i) => i !== doc._id)) {
-            this.tempAdded.push(doc._id)
-          }
-        }
-      })
-      api.service('absencesmanagement').on('removed', (doc) => {
-        if (this.tempAdded.length > 0) {
-          this.tempAdded.splice(this.tempAdded[this.tempAdded.indexOf(doc._id)], 1)
-        } else {
-          this.total--
-        }
-      })
+      let params = {}
       this.$store.dispatch('absencestypesselect/find', params)
-      let paramsOrganization = {
-        query: {
-          organization: this.userData.organization._id
-        }
-      }
-      console.log(paramsOrganization)
-      this.$store.dispatch('findusersbyorganization/find', paramsOrganization)
-    },
-    getNextPage () {
-      if (!this.scrollBottom) {
-        this.nextPage = false
-      }
-
-      if (this.scrollBottom && !this.nextPage && this.items.length < this.absences.pagination.default.total) {
-        this.nextPage = true
-        this.skipPage++
-        let skipValue = this.skipPage * 10
-        if (skipValue > this.absences.pagination.default.total) {
-          skipValue = this.absences.pagination.default.total
-        }
-        let params = {
+      if (this.user.organizationuser.organization) {
+        params = {
           query: {
-            $sort: this.sortValue,
-            $skip: skipValue
+            organization: this.user.organization._id
           }
         }
-        this.$store.dispatch('absencesmanagement/find', params)
       }
+      this.$store.dispatch('findusersbyorganization/find', params)
     },
     addItem () {
       this.$root.$emit('openDialogAddAbsence')
@@ -208,6 +172,10 @@ export default {
     reviewItem (item) {
       this.$store.commit('absencesmanagement/setCurrent', item)
       this.$root.$emit('openDialogReviewAbsence')
+    },
+    cancelItem (item) {
+      this.$store.commit('absencesmanagement/setCurrent', item)
+      this.$root.$emit('openDialogCancelAbsence')
     },
     formatDate (item) {
       if (typeof item !== 'undefined') {
@@ -217,19 +185,10 @@ export default {
       }
     }
   },
-  mounted () {
-    generateTable(this, window, 'absences')
+  created () {
+    this.$store.dispatch('setBreadcrumbs', [])
+    this.$store.commit(this.serviceName + '/clearAll')
+    this.initialize()
   }
 }
 </script>
-
-<style lang="sass">
-  .absences
-    position: relative
-    zoom: 1
-    min-width: 1000px
-    min-height: 20px
-    display: block
-    width: 100%
-    overflow: unset
-</style>

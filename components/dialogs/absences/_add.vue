@@ -7,17 +7,17 @@
           <v-container grid-list-md>
             <v-layout wrap>
               <v-flex xs12>
-                <v-select
+                <v-autocomplete
                   autofocus
                   label="Pilih Jenis Ketidakhadiran"
-                  autocomplete
                   v-bind:items="item_absencestypes"
                   item-text="absencestype"
+                  item-value="_id"
                   v-validate="'required'"
                   data-vv-name="absencestype"
                   :error-messages="errors.collect('absencestype')"
                   v-model="absencestype"
-                ></v-select>
+                ></v-autocomplete>
               </v-flex>
               <v-flex>
                 <v-menu
@@ -96,7 +96,6 @@
               </v-flex>
               <v-flex xs12>
                 <v-text-field
-                  autofocus
                   v-model="desc"
                   v-validate="'required'"
                   data-vv-name="desc"
@@ -110,7 +109,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat @click.native="closedialogAddButton">Batal</v-btn>
-          <v-btn flat color="blue darken-1"
+          <v-btn flat color="primary"
             @click.native="postCreated">Tambah</v-btn>
         </v-card-actions>
       </v-card>
@@ -198,7 +197,7 @@
                   desc: this.desc,
                   status: false
                 }
-                this.$store.dispatch('absencesmanagement/create', newAbsence)
+                this.$store.dispatch('absences/create', newAbsence)
                   .then(response => {
                     if (response) {
                       this.dialogAdd = false
@@ -216,7 +215,7 @@
         setTimeout(() => this.$validator.validate(field), 500)
       },
       resetAll () {
-        this.$store.commit('absencesmanagement/clearCreateError')
+        this.$store.commit('absences/clearCreateError')
         this.$validator.reset()
         this.search = null
         this.absencestype = null

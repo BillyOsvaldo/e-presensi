@@ -11,7 +11,7 @@
 </script>
 
 <style lang="sass" scoped>
-  .progress-linear
+  .v-progress-linear
     margin: 0px
     position: absolute
     top: 0

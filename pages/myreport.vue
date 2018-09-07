@@ -46,7 +46,11 @@ export default {
           year: this.y
         }
       }
+      console.log('params', params)
       this.$store.dispatch('presencesreportssingle/find', params)
+        .then(resp => {
+          console.log(resp)
+        })
 
       api.service('presences').on('created', (doc) => {
         console.log(doc)
@@ -54,6 +58,7 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('setBreadcrumbs', [])
     this.$store.commit('presencesreportssingle/clearAll')
     this.initialize()
     this.$store.dispatch('setNavigationCount', 0)
