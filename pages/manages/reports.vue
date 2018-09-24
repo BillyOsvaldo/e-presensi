@@ -23,12 +23,17 @@
         </td>
         <td>
           <div class="w-normal">
-            {{ props.item.tepat_waktu }}
+            {{ props.item.datang_tepat_waktu }}
           </div>
         </td>
         <td>
           <div class="w-normal">
             {{ props.item.telat }}
+          </div>
+        </td>
+        <td>
+          <div class="w-normal">
+            {{ props.item.pulang_tepat_waktu }}
           </div>
         </td>
         <td>
@@ -49,11 +54,6 @@
         <td>
           <div class="w-normal">
             {{ props.item.cuti }}
-          </div>
-        </td>
-        <td>
-          <div class="w-normal">
-            {{ props.item.izin }}
           </div>
         </td>
         <td class="w-dynamic">
@@ -124,13 +124,13 @@ export default {
     itemsSelectFilter: [],
     headers: [
       { text: 'Nama', value: 'name', align: 'left', sortable: true, class: 'w-space w-large' },
-      { text: 'Tepat  Waktu', value: 'tepat_waktu', align: 'left', class: 'w-normal' },
-      { text: 'Telat', value: 'telat', align: 'left', class: 'w-normal' },
+      { text: 'Datang Tepat  Waktu', value: 'tepat_waktu', align: 'left', class: 'w-normal' },
+      { text: 'Datang Terlambat', value: 'telat', align: 'left', class: 'w-normal' },
+      { text: 'Pulang Tepat Waktu', value: 'pulang_tepat_waktu', align: 'left', class: 'w-normal' },
       { text: 'Pulang Cepat', value: 'pulang_cepat', align: 'left', class: 'w-normal' },
       { text: 'Alpha', value: 'alpa', align: 'left', class: 'w-normal' },
       { text: 'Dinas Luar', value: 'dl', align: 'left', class: 'w-normal' },
       { text: 'Cuti', value: 'cuti', align: 'left', class: 'w-normal' },
-      { text: 'Izin', value: 'izin', align: 'left', class: 'w-normal' },
       { text: 'Sakit', align: 'left', value: 'sakit', class: 'w-normal' }
     ],
     additionalFilter: [],
